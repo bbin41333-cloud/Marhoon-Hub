@@ -1,0 +1,167 @@
+‎--// MARHOON DIVAZ HUB
+‎--// Roblox Studio - LocalScript
+‎--// Dùng cho game của chính bạn
+‎
+‎local Players = game:GetService("Players")
+‎local TeleportService = game:GetService("TeleportService")
+‎
+‎local player = Players.LocalPlayer
+‎
+‎-- Thay bằng Asset ID của ảnh bạn đã upload lên Roblox
+‎local IMAGE_ID = "rbxassetid://126376059107051"
+‎
+‎--// GUI
+‎local gui = Instance.new("ScreenGui")
+‎gui.Name = "MarhoonDivazHub"
+‎gui.ResetOnSpawn = false
+‎gui.Parent = player:WaitForChild("PlayerGui")
+‎
+‎-- Nền
+‎local background = Instance.new("ImageLabel")
+‎background.Size = UDim2.fromScale(1, 1)
+‎background.Position = UDim2.fromScale(0, 0)
+‎background.Image = 126376059107
+‎background.ImageTransparency = 0.55
+‎background.ScaleType = Enum.ScaleType.Crop
+‎background.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+‎background.Parent = gui
+‎
+‎-- Lớp tối
+‎local dark = Instance.new("Frame")
+‎dark.Size = UDim2.fromScale(1, 1)
+‎dark.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+‎dark.BackgroundTransparency = 0.35
+‎dark.BorderSizePixel = 0
+‎dark.Parent = background
+‎
+‎-- Menu
+‎local main = Instance.new("Frame")
+‎main.Size = UDim2.new(0, 430, 0, 500)
+‎main.Position = UDim2.new(0.5, -215, 0.5, -250)
+‎main.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+‎main.BackgroundTransparency = 0.08
+‎main.BorderSizePixel = 0
+‎main.Parent = gui
+‎
+‎local corner = Instance.new("UICorner")
+‎corner.CornerRadius = UDim.new(0, 18)
+‎corner.Parent = main
+‎
+‎-- Avatar
+‎local avatar = Instance.new("ImageLabel")
+‎avatar.Size = UDim2.new(0, 75, 0, 75)
+‎avatar.Position = UDim2.new(0, 18, 0, 18)
+‎avatar.Image = 126376059107
+‎avatar.BackgroundTransparency = 1
+‎avatar.ScaleType = Enum.ScaleType.Crop
+‎avatar.Parent = main
+‎
+‎local avatarCorner = Instance.new("UICorner")
+‎avatarCorner.CornerRadius = UDim.new(1, 0)
+‎avatarCorner.Parent = avatar
+‎
+‎-- Tiêu đề
+‎local title = Instance.new("TextLabel")
+‎title.Size = UDim2.new(1, -115, 0, 45)
+‎title.Position = UDim2.new(0, 110, 0, 20)
+‎title.BackgroundTransparency = 1
+‎title.Text = "MARHOON DIVAZ HUB"
+‎title.TextColor3 = Color3.fromRGB(255, 255, 255)
+‎title.TextSize = 24
+‎title.Font = Enum.Font.GothamBold
+‎title.TextXAlignment = Enum.TextXAlignment.Left
+‎title.Parent = main
+‎
+‎local sub = Instance.new("TextLabel")
+‎sub.Size = UDim2.new(1, -115, 0, 25)
+‎sub.Position = UDim2.new(0, 110, 0, 58)
+‎sub.BackgroundTransparency = 1
+‎sub.Text = "Divaz • Main Menu"
+‎sub.TextColor3 = Color3.fromRGB(180, 180, 180)
+‎sub.TextSize = 14
+‎sub.Font = Enum.Font.Gotham
+‎sub.TextXAlignment = Enum.TextXAlignment.Left
+‎sub.Parent = main
+‎
+‎-- Hàm tạo nút
+‎local function createButton(text, y)
+‎	local button = Instance.new("TextButton")
+‎	button.Size = UDim2.new(1, -36, 0, 50)
+‎	button.Position = UDim2.new(0, 18, 0, y)
+‎	button.BackgroundColor3 = Color3.fromRGB(35, 35, 43)
+‎	button.TextColor3 = Color3.fromRGB(255, 255, 255)
+‎	button.Text = text
+‎	button.TextSize = 17
+‎	button.Font = Enum.Font.GothamSemibold
+‎	button.AutoButtonColor = true
+‎	button.Parent = main
+‎
+‎	local c = Instance.new("UICorner")
+‎	c.CornerRadius = UDim.new(0, 12)
+‎	c.Parent = button
+‎
+‎	return button
+‎end
+‎
+‎-- Các nút
+‎local atm = createButton("💰  FARM TIỀN ATM", 115)
+‎local quest = createButton("📋  LÀM NHIỆM VỤ", 175)
+‎local fly = createButton("🪽  FLY", 235)
+‎local server = createButton("🌐  SERVER HOP", 295)
+‎local emptyServer = createButton("👥  SERVER ÍT NGƯỜI", 355)
+‎local close = createButton("✕  ĐÓNG MENU", 415)
+‎
+‎-- Thông báo
+‎local function notify(message)
+‎	local notice = Instance.new("TextLabel")
+‎	notice.Size = UDim2.new(0, 320, 0, 45)
+‎	notice.Position = UDim2.new(0.5, -160, 1, -70)
+‎	notice.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+‎	notice.TextColor3 = Color3.fromRGB(255, 255, 255)
+‎	notice.Text = message
+‎	notice.TextSize = 15
+‎	notice.Font = Enum.Font.GothamSemibold
+‎	notice.Parent = gui
+‎
+‎	local c = Instance.new("UICorner")
+‎	c.CornerRadius = UDim.new(0, 10)
+‎	c.Parent = notice
+‎
+‎	task.delay(2, function()
+‎		notice:Destroy()
+‎	end)
+‎end
+‎
+‎--// Nút ATM
+‎atm.MouseButton1Click:Connect(function()
+‎	notify("💰 ATM Farm cần kết nối với hệ thống ATM của game.")
+‎end)
+‎
+‎--// Nút nhiệm vụ
+‎quest.MouseButton1Click:Connect(function()
+‎	notify("📋 Mở hệ thống nhiệm vụ của game.")
+‎end)
+‎
+‎--// Fly
+‎fly.MouseButton1Click:Connect(function()
+‎	notify("🪽 Fly chỉ hoạt động khi game của bạn cấp quyền.")
+‎end)
+‎
+‎--// Server Hop
+‎server.MouseButton1Click:Connect(function()
+‎	notify("🌐 Đang chuyển server...")
+‎	task.wait(0.5)
+‎
+‎	TeleportService:Teleport(game.PlaceId, player)
+‎end)
+‎
+‎--// Server ít người
+‎emptyServer.MouseButton1Click:Connect(function()
+‎	notify("👥 Chức năng này cần hệ thống server-list của game.")
+‎end)
+‎
+‎--// Đóng
+‎close.MouseButton1Click:Connect(function()
+‎	main.Visible = false
+‎	background.Visible = false
+‎end)
