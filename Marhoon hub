@@ -1,0 +1,253 @@
+--// marhoon egg
+--// ALL-IN-ONE SCRIPT
+--// Dùng trong Roblox Studio cho game của bạn
+
+local Players = game:GetService("Players")
+
+local player = Players.LocalPlayer
+
+--------------------------------------------------
+-- GUI
+--------------------------------------------------
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "MarhoonEgg"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.fromOffset(300, 300)
+frame.Position = UDim2.new(0, 20, 0.5, -150)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+frame.BorderSizePixel = 0
+frame.Parent = gui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 15)
+corner.Parent = frame
+
+--------------------------------------------------
+-- AVATAR
+--------------------------------------------------
+
+local avatar = Instance.new("ImageLabel")
+avatar.Size = UDim2.fromOffset(70, 70)
+avatar.Position = UDim2.fromOffset(15, 15)
+avatar.BackgroundTransparency = 1
+avatar.Parent = frame
+
+local thumb = Players:GetUserThumbnailAsync(
+	player.UserId,
+	Enum.ThumbnailType.HeadShot,
+	Enum.ThumbnailSize.Size100x100
+)
+
+avatar.Image = thumb
+
+local avatarCorner = Instance.new("UICorner")
+avatarCorner.CornerRadius = UDim.new(1, 0)
+avatarCorner.Parent = avatar
+
+--------------------------------------------------
+-- TITLE
+--------------------------------------------------
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -100, 0, 35)
+title.Position = UDim2.fromOffset(95, 20)
+title.BackgroundTransparency = 1
+title.Text = "🥚 marhoon egg"
+title.TextColor3 = Color3.new(1,1,1)
+title.TextSize = 21
+title.Font = Enum.Font.GothamBold
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = frame
+
+--------------------------------------------------
+-- CREATIVE
+--------------------------------------------------
+
+local creative = Instance.new("TextLabel")
+creative.Size = UDim2.new(1, -100, 0, 30)
+creative.Position = UDim2.fromOffset(95, 55)
+creative.BackgroundTransparency = 1
+creative.Text = "👑 Creative"
+creative.TextColor3 = Color3.fromRGB(255,210,70)
+creative.TextSize = 17
+creative.Font = Enum.Font.GothamBold
+creative.TextXAlignment = Enum.TextXAlignment.Left
+creative.Parent = frame
+
+--------------------------------------------------
+-- AUTO FARM
+--------------------------------------------------
+
+local autoFarm = false
+
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(1, -30, 0, 50)
+button.Position = UDim2.fromOffset(15, 105)
+button.BackgroundColor3 = Color3.fromRGB(55,55,65)
+button.Text = "AUTO FARM: OFF"
+button.TextColor3 = Color3.new(1,1,1)
+button.TextSize = 18
+button.Font = Enum.Font.GothamBold
+button.Parent = frame
+
+local buttonCorner = Instance.new("UICorner")
+buttonCorner.CornerRadius = UDim.new(0,10)
+buttonCorner.Parent = button
+
+button.MouseButton1Click:Connect(function()
+
+	autoFarm = not autoFarm
+
+	if autoFarm then
+		button.Text = "AUTO FARM: ON"
+		button.BackgroundColor3 = Color3.fromRGB(40,150,70)
+	else
+		button.Text = "AUTO FARM: OFF"
+		button.BackgroundColor3 = Color3.fromRGB(55,55,65)
+	end
+
+end)
+
+--------------------------------------------------
+-- STATUS
+--------------------------------------------------
+
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(1, -30, 0, 60)
+status.Position = UDim2.fromOffset(15, 165)
+status.BackgroundTransparency = 1
+status.Text = "Status: Waiting..."
+status.TextColor3 = Color3.fromRGB(210,210,210)
+status.TextSize = 15
+status.Font = Enum.Font.Gotham
+status.TextWrapped = true
+status.Parent = frame
+
+--------------------------------------------------
+-- CREATIVE NAME TAG
+--------------------------------------------------
+
+local function createNameTag(character)
+
+	local head = character:WaitForChild("Head")
+
+	local old = head:FindFirstChild("CreativeTag")
+	if old then
+		old:Destroy()
+	end
+
+	local tag = Instance.new("BillboardGui")
+	tag.Name = "CreativeTag"
+	tag.Size = UDim2.fromOffset(200,50)
+	tag.StudsOffset = Vector3.new(0,3,0)
+	tag.AlwaysOnTop = true
+	tag.Parent = head
+
+	local text = Instance.new("TextLabel")
+	text.Size = UDim2.fromScale(1,1)
+	text.BackgroundTransparency = 1
+	text.Text = "👑 Creative"
+	text.TextColor3 = Color3.fromRGB(255,210,70)
+	text.TextStrokeTransparency = 0
+	text.TextSize = 20
+	text.Font = Enum.Font.GothamBold
+	text.Parent = tag
+
+end
+
+if player.Character then
+	createNameTag(player.Character)
+end
+
+player.CharacterAdded:Connect(createNameTag)
+
+--------------------------------------------------
+-- AUTO FARM RARE EGG
+--------------------------------------------------
+
+task.spawn(function()
+
+	while task.wait(0.5) do
+
+		if autoFarm then
+
+			local character = player.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+
+			local rareEgg = workspace:FindFirstChild("RareEgg")
+
+			if root and rareEgg and rareEgg:IsA("BasePart") then
+
+				root.CFrame = rareEgg.CFrame + Vector3.new(0,3,0)
+
+				status.Text = "Status: Đang farm Rare Egg 🥚"
+
+			else
+
+				status.Text = "Status: Không tìm thấy RareEgg ❌"
+
+			end
+
+		end
+
+	end
+
+end)
+
+--------------------------------------------------
+-- DRAG GUI
+--------------------------------------------------
+
+local dragging = false
+local dragStart
+local startPos
+
+frame.InputBegan:Connect(function(input)
+
+	if input.UserInputType == Enum.UserInputType.MouseButton1
+		or input.UserInputType == Enum.UserInputType.Touch then
+
+		dragging = true
+		dragStart = input.Position
+		startPos = frame.Position
+
+	end
+
+end)
+
+frame.InputEnded:Connect(function(input)
+
+	if input.UserInputType == Enum.UserInputType.MouseButton1
+		or input.UserInputType == Enum.UserInputType.Touch then
+
+		dragging = false
+
+	end
+
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+
+	if dragging and (
+		input.UserInputType == Enum.UserInputType.MouseMovement
+		or input.UserInputType == Enum.UserInputType.Touch
+	) then
+
+		local delta = input.Position - dragStart
+
+		frame.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+
+	end
+
+end)
+
+print("🥚 marhoon egg loaded!")
