@@ -1,0 +1,90 @@
+--// MARHOON SPEED MENU
+--// Roblox Studio - LocalScript
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local speed = 1
+local MIN_SPEED = 1
+local MAX_SPEED = 200
+
+-- GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "MarhoonSpeedMenu"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 260, 0, 130)
+frame.Position = UDim2.new(0.5, -130, 0.5, -65)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.Parent = gui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = frame
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 40)
+title.BackgroundTransparency = 1
+title.Text = "MARHOON SPEED"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.TextScaled = true
+title.Font = Enum.Font.GothamBold
+title.Parent = frame
+
+local speedText = Instance.new("TextLabel")
+speedText.Size = UDim2.new(0, 100, 0, 40)
+speedText.Position = UDim2.new(0.31, 0, 0.42, 0)
+speedText.BackgroundTransparency = 1
+speedText.TextColor3 = Color3.new(1, 1, 1)
+speedText.Text = "Speed: 1"
+speedText.TextScaled = true
+speedText.Font = Enum.Font.GothamBold
+speedText.Parent = frame
+
+local minus = Instance.new("TextButton")
+minus.Size = UDim2.new(0, 45, 0, 40)
+minus.Position = UDim2.new(0.08, 0, 0.42, 0)
+minus.Text = "-"
+minus.TextScaled = true
+minus.Font = Enum.Font.GothamBold
+minus.Parent = frame
+
+local plus = Instance.new("TextButton")
+plus.Size = UDim2.new(0, 45, 0, 40)
+plus.Position = UDim2.new(0.74, 0, 0.42, 0)
+plus.Text = "+"
+plus.TextScaled = true
+plus.Font = Enum.Font.GothamBold
+plus.Parent = frame
+
+local function applySpeed()
+	local character = player.Character
+	if not character then return end
+
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.WalkSpeed = speed
+	end
+
+	speedText.Text = "Speed: " .. speed
+end
+
+plus.MouseButton1Click:Connect(function()
+	speed = math.min(speed + 1, MAX_SPEED)
+	applySpeed()
+end)
+
+minus.MouseButton1Click:Connect(function()
+	speed = math.max(speed - 1, MIN_SPEED)
+	applySpeed()
+end)
+
+player.CharacterAdded:Connect(function(character)
+	character:WaitForChild("Humanoid")
+	task.wait(0.2)
+	applySpeed()
+end)
+
+applySpeed()
