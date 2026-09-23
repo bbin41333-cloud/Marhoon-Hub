@@ -1,0 +1,246 @@
+--// MARHOON DIVAZ HUB
+--// Roblox Studio - LocalScript
+
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+
+local player = Players.LocalPlayer
+
+--==================================================
+-- SETTINGS
+--==================================================
+
+local IMAGE_ID = "rbxassetid://126376059107051"
+
+--==================================================
+-- GUI
+--==================================================
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "MarhoonDivazHub"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = player:WaitForChild("PlayerGui")
+
+-- NỀN
+local background = Instance.new("ImageLabel")
+background.Name = "Background"
+background.Size = UDim2.fromScale(1, 1)
+background.Position = UDim2.fromScale(0, 0)
+background.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+background.BackgroundTransparency = 0
+background.Image = IMAGE_ID
+background.ImageTransparency = 0.45
+background.ScaleType = Enum.ScaleType.Crop
+background.Parent = gui
+
+-- LỚP TỐI
+local dark = Instance.new("Frame")
+dark.Size = UDim2.fromScale(1, 1)
+dark.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+dark.BackgroundTransparency = 0.35
+dark.BorderSizePixel = 0
+dark.Parent = background
+
+--==================================================
+-- MAIN MENU
+--==================================================
+
+local main = Instance.new("Frame")
+main.Name = "Main"
+main.Size = UDim2.new(0, 430, 0, 500)
+main.Position = UDim2.new(0.5, -215, 0.5, -250)
+main.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+main.BackgroundTransparency = 0.05
+main.BorderSizePixel = 0
+main.Parent = gui
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 18)
+mainCorner.Parent = main
+
+--==================================================
+-- AVATAR
+--==================================================
+
+local avatar = Instance.new("ImageLabel")
+avatar.Name = "Avatar"
+avatar.Size = UDim2.new(0, 75, 0, 75)
+avatar.Position = UDim2.new(0, 18, 0, 18)
+avatar.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+avatar.Image = IMAGE_ID
+avatar.ScaleType = Enum.ScaleType.Crop
+avatar.Parent = main
+
+local avatarCorner = Instance.new("UICorner")
+avatarCorner.CornerRadius = UDim.new(1, 0)
+avatarCorner.Parent = avatar
+
+--==================================================
+-- TITLE
+--==================================================
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -115, 0, 40)
+title.Position = UDim2.new(0, 110, 0, 20)
+title.BackgroundTransparency = 1
+title.Text = "MARHOON DIVAZ HUB"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 23
+title.Font = Enum.Font.GothamBold
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = main
+
+local sub = Instance.new("TextLabel")
+sub.Size = UDim2.new(1, -115, 0, 25)
+sub.Position = UDim2.new(0, 110, 0, 58)
+sub.BackgroundTransparency = 1
+sub.Text = "DIVAZ • MAIN MENU"
+sub.TextColor3 = Color3.fromRGB(180, 180, 180)
+sub.TextSize = 13
+sub.Font = Enum.Font.Gotham
+sub.TextXAlignment = Enum.TextXAlignment.Left
+sub.Parent = main
+
+--==================================================
+-- BUTTON FUNCTION
+--==================================================
+
+local function createButton(text, y)
+	local button = Instance.new("TextButton")
+
+	button.Size = UDim2.new(1, -36, 0, 48)
+	button.Position = UDim2.new(0, 18, 0, y)
+
+	button.BackgroundColor3 = Color3.fromRGB(38, 38, 48)
+	button.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+	button.Text = text
+	button.TextSize = 16
+	button.Font = Enum.Font.GothamSemibold
+
+	button.AutoButtonColor = true
+	button.BorderSizePixel = 0
+
+	button.Parent = main
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 12)
+	corner.Parent = button
+
+	return button
+end
+
+--==================================================
+-- BUTTONS
+--==================================================
+
+local atm =
+	createButton("💰  FARM TIỀN ATM", 115)
+
+local quest =
+	createButton("📋  LÀM NHIỆM VỤ", 173)
+
+local fly =
+	createButton("🪽  FLY", 231)
+
+local server =
+	createButton("🌐  SERVER HOP", 289)
+
+local emptyServer =
+	createButton("👥  SERVER ÍT NGƯỜI", 347)
+
+local close =
+	createButton("✕  ĐÓNG MENU", 405)
+
+--==================================================
+-- NOTIFICATION
+--==================================================
+
+local function notify(message)
+
+	local notice = Instance.new("TextLabel")
+
+	notice.Size = UDim2.new(0, 330, 0, 45)
+	notice.Position = UDim2.new(0.5, -165, 1, -65)
+
+	notice.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+	notice.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+	notice.Text = message
+	notice.TextSize = 14
+	notice.Font = Enum.Font.GothamSemibold
+
+	notice.BorderSizePixel = 0
+	notice.Parent = gui
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 10)
+	corner.Parent = notice
+
+	task.delay(2, function()
+		if notice then
+			notice:Destroy()
+		end
+	end)
+end
+
+--==================================================
+-- BUTTON EVENTS
+--==================================================
+
+atm.MouseButton1Click:Connect(function()
+	notify("💰 ATM Farm chưa được nối với hệ thống ATM.")
+end)
+
+quest.MouseButton1Click:Connect(function()
+	notify("📋 Hệ thống nhiệm vụ chưa được nối.")
+end)
+
+fly.MouseButton1Click:Connect(function()
+	notify("🪽 Fly cần được cấp quyền từ server của game.")
+end)
+
+server.MouseButton1Click:Connect(function()
+
+	notify("🌐 Đang chuyển server...")
+
+	task.wait(0.5)
+
+	local success, err = pcall(function()
+		TeleportService:Teleport(game.PlaceId, player)
+	end)
+
+	if not success then
+		warn("Teleport error:", err)
+		notify("❌ Không thể chuyển server khi đang test.")
+	end
+end)
+
+emptyServer.MouseButton1Click:Connect(function()
+	notify("👥 Server ít người cần hệ thống server-list.")
+end)
+
+close.MouseButton1Click:Connect(function()
+	main.Visible = false
+	background.Visible = false
+end)
+
+--==================================================
+-- OPEN AGAIN WITH F2
+--==================================================
+
+game:GetService("UserInputService").InputBegan:Connect(function(input, processed)
+
+	if processed then
+		return
+	end
+
+	if input.KeyCode == Enum.KeyCode.F2 then
+		main.Visible = not main.Visible
+		background.Visible = main.Visible
+	end
+
+end)
+
+print("MARHOON DIVAZ HUB đã được tải!")
